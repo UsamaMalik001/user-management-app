@@ -11,6 +11,7 @@ import { useState } from "react";
 
 export default function UserList() {
   const [editUserId, setEditUserId] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [newName, setNewName] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const {
@@ -38,11 +39,26 @@ export default function UserList() {
       </div>
     );
 
+  const filteredUsers = users.filter((user: any) =>
+    `${user.name} ${user.email}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="max-w-[1100px] mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4 text-center uppercase">
         Users List
       </h1>
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search users by name or email"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
+        />
+      </div>
       <div>
         <FormPage
           newName={newName}
@@ -55,7 +71,7 @@ export default function UserList() {
         />
       </div>
       <div className="space-y-3">
-        {users.map((user: any) => {
+        {filteredUsers.map((user: any) => {
           return (
             <Card key={user.id}>
               <CardContent className="p-4">
